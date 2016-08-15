@@ -5,12 +5,12 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import scrapy
-from scrapy.contrib.pipeline.images import ImagesPipeline
+from scrapy.pipelines.images import ImagesPipeline
 from scrapy.http import Request
 from scrapy.exceptions import DropItem
-from scrapy import log
+# from scrapy import log
 
-class LethrinidsPipeline(object):
+class FishbasePipeline(object):
     def process_item(self, item, spider):
         return item
 
@@ -22,7 +22,3 @@ class fishImagesPipeline(ImagesPipeline):
 	def get_media_requests(self, item, info):
 		for image in item['image_urls']:
 			yield Request(image)
-
-	# def image_key(self, url):
-	# 	image_guide = url.split('/')[-1]
-	# 	return 'full/%s' % (image_guide)

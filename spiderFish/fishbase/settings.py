@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for Lethrinids project
+# Scrapy settings for fishbase project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -9,14 +9,14 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'Lethrinids'
+BOT_NAME = 'fishbase'
 
-SPIDER_MODULES = ['Lethrinids.spiders']
-NEWSPIDER_MODULE = 'Lethrinids.spiders'
+SPIDER_MODULES = ['fishbase.spiders']
+NEWSPIDER_MODULE = 'fishbase.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'Lethrinids (+http://www.yourdomain.com)'
+#USER_AGENT = 'fishbase (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -47,36 +47,34 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'Lethrinids.middlewares.MyCustomSpiderMiddleware': 543,
+#    'fishbase.middlewares.MyCustomSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'Lethrinids.middlewares.MyCustomDownloaderMiddleware': 543,
+#    'fishbase.middlewares.MyCustomDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
-#EXTENSIONS = {
-#    'scrapy.extensions.telnet.TelnetConsole': None,
-#}
+EXTENSIONS = {
 
+   # 'scrapy.extensions.telnet.TelnetConsole': None,
+}
+
+LOG_STDOUT = True
+LOG_LEVEL = 'INFO'
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'Lethrinids.pipelines.SomePipeline': 300,
-#}
-
-ITEM_PIPELINES = { 'Lethrinids.pipelines.fishImagesPipeline':1,
+ITEM_PIPELINES = { 'fishbase.pipelines.fishImagesPipeline':1,
 'scrapy.pipelines.images.ImagesPipeline': 1, 
 'scrapy.pipelines.files.FilesPipeline': 1,
 'scrapy.contrib.pipeline.images.FilesPipeline':1,
 }
 
-# FILES_STORE = '/Users/hannah/Dropbox/Westneat_Lab/OpenCV_Sandbox/Scrapy_Lethrinids/Output'
+IMAGES_STORE = '/Users/hannah/Dropbox/Westneat_Lab/OpenCV_Sandbox/spiderFish/fishbase/output'
 
-IMAGES_STORE = '/Users/hannah/Dropbox/Westneat_Lab/OpenCV_Sandbox/Scrapy_Lethrinids/Output'
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

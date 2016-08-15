@@ -16,9 +16,7 @@ class FishItem(scrapy.Item):
 	image_urls = scrapy.Field()
 	images = scrapy.Field()
 
-	# desc = scrapy.Field()
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    # pass
-
-
+# class FishbaseItem(scrapy.Item):
+#     # define the fields for your item here like:
+#     # name = scrapy.Field()
+#     pass
