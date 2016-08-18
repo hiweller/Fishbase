@@ -46,16 +46,16 @@ for pic in images:
 	ctrcorr.append(ctr)
 
 
-
-
 names = [t[t.rfind("/")+1:] for t in images]
 
 zippy = zip(features, names, ctrcorr)
 
-""" Perform 2 checks: 
+""" Perform 3 kinds of checks: 
 1) How many peaks are there within a certain range of the first peak? Uniform background will have relatively few high peaks while variable background will have many lower peaks and no strong signals. Measure by counting the number of peaks within some threshold below the highest peak [peak-thresh:peak].
-2) Of those without a single strong peak, are the four corners extremely similar? Measure using correlation coefficients between four corners. If at least two are above the threshold then we have at least two pairs of corners that are extremely similar (usually top two and bottom two). If # (corrcoef >= 0.9) >= 2 then keep image.
-Take images that passed one of two checks and copy them to a 'Keep' folder within current WD; put remaining images in a 'Reject' folder - can be accessed later to check for any missing images. 
+1a) How dissimilar are the corners from the center of the image? If the corners are extremely uniform, this is a fairly lenient check (correlation between corners and center < 0.998, mostly just gets rid of tiled images), since often a fish will be partially transparent or similar in color to the background.
+2) Of those without a single strong peak, are the four corners extremely similar? Measure using correlation coefficients between four corners. If at least two are above the threshold then we have at least two pairs of corners that are extremely similar (usually top two and bottom two). If # (corrcoef >= failCorr) >= 2 then keep image.
+2a) If the corners are fairly similar but not extremely similar, check whether the center of the image is extremely dissimilar from the corners (meaning there's probably a fish taking up most of the center).
+Take images that passed one of two checks and copy them to a 'Pass' folder within current WD; put remaining images in a 'Fail' folder - can be accessed later to check for any missing images. 
 """
 
 # CHECK ONE
@@ -63,12 +63,12 @@ checkOneStrict = []
 checkOneSoft = []
 checkOneFail = []
 ctrCorr = []
-peakThresh = 0.5
 
 strictMean = 1.5
 softMean = 4
+peakThresh = 0.5
 
-baseCtr = 0.9
+baseCtr = 0.998
 strictCtr = 0.25
 softCtr = 0.11
 maxCtr = 0.15
@@ -85,7 +85,7 @@ for pic in zippy:
 	for corner in vec[0:4]:
 		temp.append(sum(np.logical_and(corner >= max(corner)-peakThresh, corner <= max(corner))))
 
-	if np.mean(temp) <= strictMean and max(ctrcorr) <= 0.998:
+	if np.mean(temp) <= strictMean and max(ctrcorr) <= baseCtr:
 		checkOneStrict.append(pic)
 	elif strictMean < np.mean(temp) <= softMean and np.mean(ctrcorr) <= strictCtr:
 		checkOneSoft.append(pic)
@@ -116,10 +116,8 @@ for pic in checkOneFail:
 	temp = temp[0][1:4], temp[1][2:4], temp[2][3:4]
 	temp = [i for j in temp for i in j]
 	temp = sorted(temp, reverse=True)[0:2]
-	# temp = max(temp)
 
 	if all(i >= failCorr for i in temp) and np.mean(ctrcorr) <= strictCtr and max(ctrcorr) <= maxCtr:
-	# if temp >= failCorr:
 		checkTwoPass.append(pic)
 	elif np.mean(ctrcorr) <= softCtr and max(ctrcorr) <= 0.995:
 		checkTwoPass.append(pic)
